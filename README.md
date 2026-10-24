@@ -17,6 +17,6 @@ jobs:
           preview-url: https://pr-${{ github.event.number }}.example.vercel.app
 ```
 
-Use `urls` instead of `preview-url` for specific addresses, and `fail-on: warning` to be stricter.
+Use `urls` instead of `preview-url` for specific addresses, `fail-on: warning` to be stricter, and `baseline-crawl-id` to compare against a chosen crawl (say, the one taken after the last release) instead of the latest.
 
 MIT licensed. Published from the Seolyticize monorepo.

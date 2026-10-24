@@ -31,6 +31,7 @@ export function readInputs(env) {
   if (!apiKey) throw new Error("api-key is required.");
   if (!clientId) throw new Error("client-id is required.");
   if (!previewUrl && urls.length === 0) throw new Error("Give preview-url or urls.");
+  const baselineCrawlId = input(env, "baseline-crawl-id") || null;
   const maxUrls = Math.min(Math.max(Number(input(env, "max-urls", "50")) || 50, 1), 200);
   return {
     apiKey,
@@ -39,6 +40,7 @@ export function readInputs(env) {
     urls,
     maxUrls,
     failOn,
+    baselineCrawlId,
     comment: input(env, "comment", "true") !== "false",
     githubToken: input(env, "github-token"),
     apiBase: input(env, "api-base", "https://seolyticize.com").replace(/\/+$/, ""),
@@ -51,6 +53,7 @@ export async function checkDeploy(inputs, fetchImpl = fetch) {
     clientId: inputs.clientId,
     maxUrls: inputs.maxUrls,
     failOn: inputs.failOn,
+    ...(inputs.baselineCrawlId ? { baselineCrawlId: inputs.baselineCrawlId } : {}),
     ...(inputs.previewUrl ? { previewUrl: inputs.previewUrl } : { urls: inputs.urls }),
   };
   const response = await fetchImpl(`${inputs.apiBase}/api/v1/tools/check_deploy`, {

@@ -29,6 +29,12 @@ inputs:
       or comma-separated. Matched to the crawl by path.
     required: false
     default: ""
+  baseline-crawl-id:
+    description: >-
+      Compare against this crawl instead of the latest complete one, e.g. the
+      crawl taken after the last release (list_crawls gives the ids).
+    required: false
+    default: ""
   max-urls:
     description: How many pages to check, up to 200.
     required: false
