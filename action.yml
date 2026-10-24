@@ -1,0 +1,61 @@
+name: Seolyticize SEO check
+description: >-
+  Fails a pull request that would break SEO. Fetches a deploy preview (or a list
+  of URLs) and compares status, robots, canonical, hreflang, title, H1 and
+  structured data with the latest Seolyticize crawl of production, then posts
+  the differences as a pull-request comment.
+author: Seolyticize
+branding:
+  icon: search
+  color: green
+inputs:
+  api-key:
+    description: >-
+      A Seolyticize API key with project:manage on the client (a site key works).
+      Keep it in a repository secret.
+    required: true
+  client-id:
+    description: The Seolyticize client whose site this repository deploys.
+    required: true
+  preview-url:
+    description: >-
+      The deploy preview or staging origin, e.g. https://pr-12.example.vercel.app.
+      One or more pages per template from the latest crawl are fetched on it.
+    required: false
+    default: ""
+  urls:
+    description: >-
+      Specific addresses to check instead (production or preview), one per line
+      or comma-separated. Matched to the crawl by path.
+    required: false
+    default: ""
+  max-urls:
+    description: How many pages to check, up to 200.
+    required: false
+    default: "50"
+  fail-on:
+    description: Fail the job on changes at or above this severity (critical, warning or notice).
+    required: false
+    default: critical
+  comment:
+    description: Post (or update) a pull-request comment with the differences.
+    required: false
+    default: "true"
+  github-token:
+    description: Token used to comment on the pull request; needs pull-requests write.
+    required: false
+    default: ${{ github.token }}
+  api-base:
+    description: The Seolyticize address, for a self-hosted install.
+    required: false
+    default: https://seolyticize.com
+outputs:
+  passed:
+    description: '"true" when nothing at or above fail-on changed.'
+  critical:
+    description: How many critical changes were found.
+  checked:
+    description: How many pages were compared.
+runs:
+  using: node24
+  main: dist/index.mjs
